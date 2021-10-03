@@ -1,65 +1,46 @@
 #include <cairo.h>
+#include <stdio.h>
+#include <inttypes.h>
 
-int main(int argc, char *argv[]) {
-  argc++;
-  argv++;
-  cairo_surface_t *surface =
-      cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 512, 512);
-  cairo_t *cr = cairo_create(surface);
+uint32_t width = 0, height = 0;
+double fraction = 0., start_x = 0., start_y = 0., end_x = 0., end_y = 0.;
+cairo_surface_t *surface = NULL;
+cairo_t *cr  = NULL;
+int main() {
+  scanf("%"PRIu32, &width);
+  scanf("%"PRIu32, &height);
+  scanf("%lf", &fraction);
+  scanf("%lf", &start_x);
+  scanf("%lf", &start_y);
+  scanf("%lf",&end_x);
+  scanf("%lf",&end_y);
+  printf("Width: %"PRIu32"\n",width);
+  printf("Height: %"PRIu32"\n",height);
+  printf("Fraction: %lf\n",fraction);
+  printf("Start: %lf\n",start);
+  printf("End: %lf\n",end);
 
-  // process command line input per specification
+  // Initialize cairo
+  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+  cr = cairo_create(surface);
 
-  // default is black background.  set background to white.
-  // set pen to black
-
-  // top left corner -- green X on black background
-  // default background is black
-
-  cairo_set_source_rgb(cr, 0, 1, 0); // green
-  cairo_move_to(cr, 0, 0);           // top left corner
-  cairo_line_to(cr, 256, 256);       // middle of the image
-  cairo_move_to(cr, 256, 0);
-  cairo_line_to(cr, 0, 256);
-  cairo_set_line_width(cr, 10.0);
-  cairo_stroke(cr);
-
-  // bottom left corner -- white box on blue background using
-  // coordinate specification
-
-  cairo_set_source_rgb(cr, 0, 0, 1); // blue
-  cairo_rectangle(cr, 0, 255, 255, 255);
+  // Set background to white
+  cairo_rectangle(cr, 0, 0, width, height);
+  cairo_set_source_rgb(cr, 0, 0, 0); // purple
   cairo_fill(cr);
 
-  cairo_move_to(cr, 0, 255);
-  cairo_line_to(cr, 255, 255);
-  cairo_line_to(cr, 255, 511);
-  cairo_line_to(cr, 0, 511);
-  cairo_close_path(cr);
+  // Make recursive call
+  recursive_call(cr, width, height, fraction, start, end);
 
-  cairo_set_source_rgb(cr, 1, 1, 1); // white
-  cairo_set_line_width(cr, 8.0);
-  cairo_stroke(cr);
-
-  // bottom right corner -- red box on white background using
-  // relative line drawing
-
-  cairo_set_source_rgb(cr, 1, 1, 1); // white
-  cairo_rectangle(cr, 256, 256, 511, 511);
-  cairo_fill(cr);
-
-  cairo_move_to(cr, 256, 256);
-  cairo_rel_line_to(cr, 256, 0);
-  cairo_rel_line_to(cr, 0, 256);
-  cairo_rel_line_to(cr, -256, 0);
-  cairo_close_path(cr);
-
-  cairo_set_source_rgb(cr, 1, 0, 0); // red
-  cairo_set_line_width(cr, 5.5);
-  cairo_stroke(cr);
-
-  // send output to png file
+  // Output to png and memory management
   cairo_destroy(cr);
-  cairo_surface_write_to_png(surface, "square.png");
+  cairo_surface_write_to_png(surface, "temp.png");
   cairo_surface_destroy(surface);
   return 0;
+}
+
+void recursive_call(double w, double h, double f, double s_x, double s_y,
+    double e_x, double e_y){
+  cairo_set_source_rgb(cr, 1, 0, 1);
+  cairo_move_to(w/s_x, h/s_y);
 }

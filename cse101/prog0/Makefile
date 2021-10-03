@@ -12,6 +12,7 @@ executable: clean
 clean:
 	rm -f $(OUTPUT)
 	rm -f *.o
+	rm -f *.png
 
 scan-build: clean
 	scan-build make
