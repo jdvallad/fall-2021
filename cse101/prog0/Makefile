@@ -1,17 +1,20 @@
 CC = clang
+OUTPUT = prog0
+INPUT = prog0.c
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
-all: prog0
+PACKAGES = -lm `pkg-config --cflags --libs cairo`
 
-banhammer:
-	$(CC) -o prog0 $(pkg-config --cflags --libs cairo) -lm prog0.c
+all: executable
+
+executable: clean
+	 $(CC) $(CFLAGS) $(INPUT) -o $(OUTPUT) $(PACKAGES)
 
 clean:
-	rm -f prog0
+	rm -f $(OUTPUT)
 	rm -f *.o
 
 scan-build: clean
 	scan-build make
 
 format: clean
-	$(CC)-format -i -style=file *.h
-	$(CC)-format -i -style=file *.c
+	$(CC)-format -i *.c
