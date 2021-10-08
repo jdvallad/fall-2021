@@ -14,4 +14,74 @@ typedef struct ListObj{
     int length;
 }ListObj;
 
+ListPtr newList(){
+  ListPtr res = (ListPtr) malloc(sizeof(ListPtr));
+  res->data = 0;
+  res->next = NULL;
+  return res;
+}
 
+void freeList(ListPtr* pL){
+  if(pL){
+    NodePtr temp = *pl->head;
+    while(temp){
+     free(temp);
+     temp = temp->next;
+    }
+    free(*pl);
+    pl = NULL;
+  }
+  return;
+}
+
+int length(ListPtr L){
+  return L->length;
+}
+
+int max(ListPtr L){
+  int index = 0;
+  int max_index = 0;
+  NodePtr temp = L->head;
+  int max = temp->data;
+  while(temp){
+    if(temp->data>max){
+      max = temp->data;
+      max_index = index;
+    }
+    index++;
+    temp = temp->next;
+  }
+  return max_index;
+}
+
+int find(ListPtr L, int i){
+  int index = 0;
+  NodePtr temp = L->head;
+  while(temp){
+    if(temp->data == i){
+      return index;
+    }
+    index++;
+    temp = temp->next;
+  }
+  return -1;
+}
+
+int delElement(ListPtr L, int i){
+  int index = 0;
+  NodePtr prev = NULL;
+  NodePtr temp = L->head;
+  while(index != i){
+    prev = second;
+    temp = second->head;
+    index++;
+  }
+  if(prev){
+    prev->next = temp->next;
+  }
+  int res = temp->data;
+  free(temp);
+  return res;
+}
+
+void appendList
