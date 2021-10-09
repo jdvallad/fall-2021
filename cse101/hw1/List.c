@@ -15,7 +15,7 @@ typedef struct ListObj{
 }ListObj;
 
 ListPtr newList(){
-  ListPtr res = (ListPtr) malloc(sizeof(ListPtr));
+  ListPtr res = (ListPtr) malloc(sizeof(ListObj));
   res->data = 0;
   res->next = NULL;
   return res;
@@ -84,4 +84,24 @@ int delElement(ListPtr L, int i){
   return res;
 }
 
-void appendList
+void appendList(ListPtr L, int i){
+  NodePtr temp = L->head;
+  while(temp->next){
+    temp = temp->next;
+  }
+  NodePtr res = (NodePtr) malloc(sizeof(NodeObj));
+  res.data = i;
+  temp->next = &res;
+  return;
+}
+
+void printList(ListPtr L){
+  NodePtr temp = L->head;
+  printf("%d ", temp->data);
+  while(temp->next){
+    temp = temp->next;
+    printf("%d ", temp->data);
+  }
+  printf("\n");
+  return;
+}
