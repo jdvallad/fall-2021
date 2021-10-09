@@ -16,8 +16,10 @@ typedef struct ListObj{
 
 ListPtr newList(){
   ListPtr res = (ListPtr) malloc(sizeof(ListObj));
+  if(res){
   res->head = NULL;
   res->length = 0;
+  }
   return res;
 }
 
@@ -107,6 +109,9 @@ void appendList(ListPtr L, int i){
     temp = temp->next;
   }
   NodePtr res = (NodePtr) malloc(sizeof(NodeObj));
+  if(res == NULL){
+    return;
+  }
   res->data = i;
   temp->next = res;
   L->length++;
