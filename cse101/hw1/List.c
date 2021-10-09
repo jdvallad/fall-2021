@@ -16,20 +16,21 @@ typedef struct ListObj{
 
 ListPtr newList(){
   ListPtr res = (ListPtr) malloc(sizeof(ListObj));
-  res->data = 0;
-  res->next = NULL;
+  res->head = NULL;
+  res->length = 0;
   return res;
 }
 
 void freeList(ListPtr* pL){
   if(pL){
-    NodePtr temp = *pl->head;
+    NodePtr temp = (*pL)->head;
     while(temp){
-     free(temp);
+     NodePtr a = temp;
      temp = temp->next;
+     free(a);
     }
-    free(*pl);
-    pl = NULL;
+    free(*pL);
+    pL = NULL;
   }
   return;
 }
@@ -39,6 +40,9 @@ int length(ListPtr L){
 }
 
 int max(ListPtr L){
+  if(L->length == 0){
+    return -1;
+  }
   int index = 0;
   int max_index = 0;
   NodePtr temp = L->head;
@@ -55,6 +59,9 @@ int max(ListPtr L){
 }
 
 int find(ListPtr L, int i){
+  if(L->length == 0){
+    return -1;
+  }
   int index = 0;
   NodePtr temp = L->head;
   while(temp){
@@ -68,12 +75,15 @@ int find(ListPtr L, int i){
 }
 
 int delElement(ListPtr L, int i){
+  if(L->length == 0){
+    return -1;
+  }
   int index = 0;
   NodePtr prev = NULL;
   NodePtr temp = L->head;
   while(index != i){
-    prev = second;
-    temp = second->head;
+    prev = temp;
+    temp = temp->next;
     index++;
   }
   if(prev){
@@ -81,26 +91,37 @@ int delElement(ListPtr L, int i){
   }
   int res = temp->data;
   free(temp);
+  L->length--;
   return res;
 }
 
 void appendList(ListPtr L, int i){
   NodePtr temp = L->head;
+  if(temp == NULL){
+    L->head = (NodePtr) malloc(sizeof(NodeObj));
+    L->head->data = i;
+    L->length = 1;
+    return;
+  }
   while(temp->next){
     temp = temp->next;
   }
   NodePtr res = (NodePtr) malloc(sizeof(NodeObj));
-  res.data = i;
-  temp->next = &res;
+  res->data = i;
+  temp->next = res;
+  L->length++;
   return;
 }
 
 void printList(ListPtr L){
+  if(L->length == 0){
+    return;
+  }
   NodePtr temp = L->head;
-  printf("%d ", temp->data);
+  printf("%d", temp->data);
   while(temp->next){
     temp = temp->next;
-    printf("%d ", temp->data);
+    printf(", %d", temp->data);
   }
   printf("\n");
   return;
