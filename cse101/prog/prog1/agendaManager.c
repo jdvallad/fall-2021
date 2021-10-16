@@ -13,23 +13,25 @@ typedef EventObj* EventPtr;
 // provided for output header formatting
 void print(ListPtr l, char *agenda_name) {
     printf("======== %s ========\n", agenda_name);
-    // print the content of the list
-
+    printList(l);
     printf("===== END OF %s =====\n", agenda_name);
 }
 
+bool dataEqual()
 int main(int argc, char **argv) {
+  //
 	// declare 2 lists
-
+  //
+   ListPtr one = newList
 
 
 
 	// accept input from the user
-	
+
 
 
 	// process input and modify appropriate list
-	
+
 
 
 
