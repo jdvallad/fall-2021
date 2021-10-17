@@ -33,14 +33,12 @@ void freeData(void *a){
   return;
 }
 
-void parseLine(char **buffer, int elements, bool hasInt){
-  char *line[200];
-  gets(line);
+void parseLine(char *line, char buffer[200][200], int elements, bool hasInt){
   int ind, innerInd,elementInd;
   char c;
   ind=innerInd=elementInd=0;
   c =line[ind];
-  while(c != " "){
+  while(c != ' '){
     buffer[elementInd][innerInd] = c;
     innerInd++;
     ind++;
@@ -50,33 +48,35 @@ void parseLine(char **buffer, int elements, bool hasInt){
   ind+=2;
   innerInd = 0;
   elementInd++;
+  if(elements == 1){
+    return;
+  }
   for(int i = 1; i < elements - 1; i++){
-    ind=innerInd=elementInd=0;
     c =line[ind];
-    while(c != "\""){
+    while(c != '"'){
       buffer[elementInd][innerInd] = c;
       innerInd++;
       ind++;
       c = line[ind];
     }
     buffer[elementInd][innerInd + 1] = '\0';
-    ind+=3;
+    ind+=2;
     innerInd = 0;
     elementInd++;
   }
   if(hasInt){
     ind--;
   }
-  ind=innerInd=elementInd=0;
   c =line[ind];
-  while(c != "\""){
+  a = hasInt ? '\0' : '"';
+  while(c != a){
     buffer[elementInd][innerInd] = c;
     innerInd++;
     ind++;
     c = line[ind];
   }
   buffer[elementInd][innerInd + 1] = '\0';
-  ind+=3;
+  ind+=2;
   innerInd = 0;
   elementInd++;
   return;
@@ -84,18 +84,17 @@ void parseLine(char **buffer, int elements, bool hasInt){
 int main(int argc, char **argv) {
   ListPtr lists[2];
   char *names[2] = {"", ""};
-  char input[30];
+  char line[200];
   lists[0] = newList(&dataEqual, &dataPrinter, &freeData);
   lists[1] = newList(&dataEqual, &dataPrinter, &freeData);
-  while(scanf("%30s", input) != EOF){
-    if(strcmp(input, "ADD") == 0){
-      char *agendaName;
-      char *eventName;
-      int startTime = 0;
-      scanf("%30s", agendaName);
-      scanf("%30s", eventName);
-      scanf("%d", startTime);
+  while(fgets(line, 200, stdin) != NULL){
+    char buffer[200][200];
+    parseLine(line,buffer, 4, true);
+    printf("[");
+    for(int i = 0; i < 4; i++){
+      printf("\"%s\", ", buffer[i]);
     }
+    printf("]\n");
   }
   freeList(&lists[0], true);
   freeList(&lists[1], true);
