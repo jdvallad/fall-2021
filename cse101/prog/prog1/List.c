@@ -21,8 +21,9 @@ void freeList( ListPtr *pL, bool freeData){
     if(freeData){
       (*pL)->freeData(temp->data);
     }
-   free(temp);
+   NodePtr a = temp;
    temp = temp->next;
+   free(a);
   }
   free(*pL);
   *pL = NULL;
@@ -45,9 +46,6 @@ int findElement(ListPtr L, void *comp){
  return index;
 }
 void *getElement( ListPtr L, int i){
-  if(L->length > i){
-    return NULL;
-  }
   int index = 0;
   NodePtr temp = L->head;
   while(temp && index < i){
@@ -55,14 +53,11 @@ void *getElement( ListPtr L, int i){
     index++;
   }
   if(temp && index == i){
-    return (void *) temp;
+    return (void *) temp->data;
   }
   return NULL;
 }
 void *delElement( ListPtr L, int i ){
-  if(L->length > i){
-    return NULL;
-  }
   int index = 0;
   NodePtr temp = L->head;
   NodePtr before = NULL;
@@ -75,13 +70,18 @@ void *delElement( ListPtr L, int i ){
    if(before){
      before->next = temp->next;
    }
+   else{
+     L->head = temp->next;
+   }
    L->length--;
-   return temp;
+   void *result = (void *)temp->data;
+   free(temp);
+   return result;
   }
   return NULL;
 }
 bool appendList( ListPtr L, void *data ){
-  return insertElement(L, L->length - 1, data);
+  return insertElement(L, L->length, data);
 }
 bool insertElement(ListPtr L, int pos, void *data){
   if(L->length > pos){
@@ -95,12 +95,15 @@ bool insertElement(ListPtr L, int pos, void *data){
     temp = temp->next;
     index++;
   }
-  if(temp && index==pos){
+  if(index==pos){
     NodePtr insert = (NodePtr) malloc(sizeof(NodeObj));
     insert->data = data;
     insert->next = temp;
     if(before){
       before->next = insert;
+    }
+    else{
+      L->head = insert;
     }
     L->length++;
     return true;
@@ -111,6 +114,7 @@ void printList(ListPtr L){
   NodePtr temp = L->head;
   while(temp){
     L->dataPrinter(temp->data);
+    temp = temp->next;
   }
   return;
 }
