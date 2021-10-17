@@ -34,7 +34,9 @@ void freeData(void *a){
 }
 
 void parseLine(char **buffer, int elements){
-
+  char *line[200];
+  gets(line);
+  return;
 }
 int main(int argc, char **argv) {
   ListPtr lists[2];
@@ -49,7 +51,7 @@ int main(int argc, char **argv) {
       int startTime = 0;
       scanf("%30s", agendaName);
       scanf("%30s", eventName);
-      scanf("%d", eventName);
+      scanf("%d", startTime);
     }
   }
   freeList(&lists[0], true);
