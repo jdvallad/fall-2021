@@ -33,9 +33,52 @@ void freeData(void *a){
   return;
 }
 
-void parseLine(char **buffer, int elements){
+void parseLine(char **buffer, int elements, bool hasInt){
   char *line[200];
   gets(line);
+  int ind, innerInd,elementInd;
+  char c;
+  ind=innerInd=elementInd=0;
+  c =line[ind];
+  while(c != " "){
+    buffer[elementInd][innerInd] = c;
+    innerInd++;
+    ind++;
+    c = line[ind];
+  }
+  buffer[elementInd][innerInd + 1] = '\0';
+  ind+=2;
+  innerInd = 0;
+  elementInd++;
+  for(int i = 1; i < elements - 1; i++){
+    ind=innerInd=elementInd=0;
+    c =line[ind];
+    while(c != "\""){
+      buffer[elementInd][innerInd] = c;
+      innerInd++;
+      ind++;
+      c = line[ind];
+    }
+    buffer[elementInd][innerInd + 1] = '\0';
+    ind+=3;
+    innerInd = 0;
+    elementInd++;
+  }
+  if(hasInt){
+    ind--;
+  }
+  ind=innerInd=elementInd=0;
+  c =line[ind];
+  while(c != "\""){
+    buffer[elementInd][innerInd] = c;
+    innerInd++;
+    ind++;
+    c = line[ind];
+  }
+  buffer[elementInd][innerInd + 1] = '\0';
+  ind+=3;
+  innerInd = 0;
+  elementInd++;
   return;
 }
 int main(int argc, char **argv) {
