@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#define EMPTY ""
 
 typedef struct EventObj{
     char *name;
@@ -33,6 +32,10 @@ void freeData(void *a){
   free(a);
   return;
 }
+
+void parseLine(char **buffer, int elements){
+
+}
 int main(int argc, char **argv) {
   ListPtr lists[2];
   char *names[2] = {"", ""};
@@ -40,13 +43,15 @@ int main(int argc, char **argv) {
   lists[0] = newList(&dataEqual, &dataPrinter, &freeData);
   lists[1] = newList(&dataEqual, &dataPrinter, &freeData);
   while(scanf("%30s", input) != EOF){
-
+    if(strcmp(input, "ADD") == 0){
+      char *agendaName;
+      char *eventName;
+      int startTime = 0;
+      scanf("%30s", agendaName);
+      scanf("%30s", eventName);
+      scanf("%d", eventName);
+    }
   }
-  EventPtr a = (EventPtr) malloc(sizeof(EventObj));
-  a->name = "breakfast";
-  a->time = 60 * 9 + 30;
-  appendList(lists[0], a);
-  print(lists[0], "one");
   freeList(&lists[0], true);
   freeList(&lists[1], true);
  return 0;
