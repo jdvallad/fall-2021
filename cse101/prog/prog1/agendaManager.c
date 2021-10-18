@@ -60,7 +60,7 @@ void parseLine(char *line, char buffer[200][200], int elements, bool hasInt){
       c = line[ind];
     }
     buffer[elementInd][innerInd + 1] = '\0';
-    ind+=2;
+    ind+=3;
     innerInd = 0;
     elementInd++;
   }
@@ -68,7 +68,7 @@ void parseLine(char *line, char buffer[200][200], int elements, bool hasInt){
     ind--;
   }
   c =line[ind];
-  a = hasInt ? '\0' : '"';
+  char a = hasInt ? '\0' : '"';
   while(c != a){
     buffer[elementInd][innerInd] = c;
     innerInd++;
@@ -76,25 +76,90 @@ void parseLine(char *line, char buffer[200][200], int elements, bool hasInt){
     c = line[ind];
   }
   buffer[elementInd][innerInd + 1] = '\0';
-  ind+=2;
-  innerInd = 0;
-  elementInd++;
+  return;
+}
+void add(ListPtr lists[2], char *names[2], char buffer[200][200]){
+  int index = -1;
+  if(strcmp(names[0], "") == 0){
+    index = 0;
+  }
+  if(strcmp(names[1], "") == 0){
+    index = 1;
+  }
+  if(strcmp(names[0], buffer[1]) == 0){
+    index = 0;
+  }
+  if(strcmp(names[1], buffer[1]) == 0){
+    index = 1;
+  }
+  if(index == -1){
+   printf("ERROR: Agenda not found\n");
+   return;
+  }
+  names[index] = buffer[1];
+  EventPtr e = (EventPtr) malloc(sizeof(EventObj));
+  e->name = buffer[2];
+  e->time = atoi(buffer[3]);
+  if(lists[index]->length == 0){
+    lists[index]->head = e;
+    return;
+  }
+  int ind = 0;
+  NodePtr temp = lists[index]->head;
+  while(temp){
+    EventPtr tempEvent = (EventPtr) temp;
+    if(strcmp(tempEvent->name,e->name) == 0){
+      printf("ERROR: Already an event with that name\n");
+      return;
+    }
+  }
+  return;
+}
+void delete(ListPtr lists[2], char *names[2], char buffer[200][200]){
+  return;
+}
+void swap(ListPtr lists[2], char *names[2], char buffer[200][200]){
+  return;
+}
+void merge(ListPtr lists[2], char *names[2], char buffer[200][200]){
+  return;
+}
+void printProperList(ListPtr lists[2], char *names[2], char buffer[200][200]){
   return;
 }
 int main(int argc, char **argv) {
+
   ListPtr lists[2];
   char *names[2] = {"", ""};
   char line[200];
   lists[0] = newList(&dataEqual, &dataPrinter, &freeData);
   lists[1] = newList(&dataEqual, &dataPrinter, &freeData);
+  char buffer[200][200];
   while(fgets(line, 200, stdin) != NULL){
-    char buffer[200][200];
-    parseLine(line,buffer, 4, true);
-    printf("[");
-    for(int i = 0; i < 4; i++){
-      printf("\"%s\", ", buffer[i]);
+    switch(*line){
+      case 'A':
+        parseLine(line,buffer, 4, true);
+        add(lists, names, buffer);
+        break;
+      case 'D':
+        parseLine(line,buffer, 2, false);
+        delete(lists, names, buffer);
+        break;
+      case 'S':
+        parseLine(line,buffer, 3, false);
+        swap(lists, names, buffer);
+        break;
+      case 'P':
+        parseLine(line,buffer, 1, false);
+        printProperList(lists, names, buffer);
+        break;
+      case 'M':
+        parseLine(line,buffer, 2, false);
+        merge(lists, names, buffer);
+        break;
+      default:
+        break;
     }
-    printf("]\n");
   }
   freeList(&lists[0], true);
   freeList(&lists[1], true);
